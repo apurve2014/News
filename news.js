@@ -1,6 +1,5 @@
 let apiKey = "571b146002fb4dafa8fe34ad8f185104";
 let newsAccordion = document.getElementById("newsAccordion");
-let newsDiv;
 let news = {};
 let navBarDiv = document.getElementById("navBar");
 let url = "";
@@ -9,9 +8,14 @@ window.onload = function () {
 	//an AJEX GET Request//
 	//url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}`;
 
-	url = "http://127.0.0.1:5400/sources";
+	url = "http://localhost:5400/sources";
 	getRequest(url);
 };
+
+function goToHome() {
+	url = "http://localhost:5400/sources";
+	getRequest(url);
+}
 
 function countryBreakingNews(evt) {
 	let cutId = evt.id;
@@ -29,7 +33,6 @@ function getRequest(url) {
 		if (xmlhttp.readyState == 4) {
 			news = JSON.parse(xmlhttp.response);
 			if (news.status == "ok" && news.articles) {
-				newsDiv = document.getElementById("newspanal");
 				drowAccoridan(news);
 			}
 			if (news.status == "ok" && news.sources) {
@@ -44,15 +47,29 @@ function getRequest(url) {
 }
 
 function showingAllCountries(news) {
+	let tableTds = "";
+	let tableTrs = "";
 	let frameToPut = "";
+	let tdCount = 3;
 	news.forEach((element, index) => {
 		let frameStr = `<div id="${element.id}" onclick="countryBreakingNews(this)">
 							<img alt="${element.name} flag" class="icon" src="${element.link}" />
 							<div title="${element.name}">${element.name}</div>
 							<div title="${element.id}"><kbd title="id: ${element.id}">${element.id}</kbd></div>
 						</div>`;
-		frameToPut += frameStr;
+
+		let tbltd = `<td>${frameStr}</td>`;
+		if (index === tdCount) {
+			tableTds += tbltd;
+			let tbltr = `<tr>${tableTds}</tr>`;
+			tableTrs += tbltr;
+			tdCount = 4 + tdCount;
+			tableTds = "";
+		} else {
+			tableTds += tbltd;
+		}
 	});
+	frameToPut = `<table>${tableTrs}<table>`;
 	newsAccordion.innerHTML = frameToPut;
 }
 function createMapOfSourcesByCountry(news) {
