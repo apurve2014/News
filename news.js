@@ -1,4 +1,4 @@
-let apiKey = "571b146002fb4dafa8fe34ad8f185104";
+let apiKey = "571b146002afa8fe34ad8f185104";
 let newsAccordion = document.getElementById("newsAccordion");
 let news = {};
 let navBarDiv = document.getElementById("navBar");
